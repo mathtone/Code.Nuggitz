@@ -10,8 +10,6 @@ namespace Code.Nuggitz {
 		//[Theory]
 		//[InlineData(3)]
 		public void BernoulliNumbers(int nums) {
-			
-
 			Console.WriteLine("Bernoulli numbers:");
 			for (int i = 0; i <= nums; i++) {
 				Console.WriteLine($"B_{i}: {BernoulliNumber(i)}");
@@ -59,7 +57,8 @@ namespace Code.Nuggitz {
 		public BigInteger Numerator { get; private set; }
 		public BigInteger Denominator { get; private set; }
 
-		public BigRational(BigInteger numerator) : this(numerator, BigInteger.One) { }
+		public BigRational(BigInteger numerator) :
+			this(numerator, BigInteger.One) { }
 
 		public BigRational(BigInteger numerator, BigInteger denominator) {
 
@@ -74,13 +73,13 @@ namespace Code.Nuggitz {
 		public static BigRational operator +(BigRational a, BigRational b) {
 			var numerator = a.Numerator * b.Denominator + b.Numerator * a.Denominator;
 			var denominator = a.Denominator * b.Denominator;
-			return new BigRational(numerator, denominator);
+			return new(numerator, denominator);
 		}
 
 		public static BigRational operator *(BigRational a, BigRational b) =>
-			new BigRational(a.Numerator * b.Numerator, a.Denominator * b.Denominator);
+			new(a.Numerator * b.Numerator, a.Denominator * b.Denominator);
 
-		public override string ToString() {
+		public override readonly string ToString() {
 			if (Denominator == 1) {
 				return Numerator.ToString();
 			}

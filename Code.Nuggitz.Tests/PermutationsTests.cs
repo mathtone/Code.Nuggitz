@@ -18,8 +18,7 @@ namespace Code.Nuggitz {
 		public void Calculate_BinomialCoefficient(int expected, int n, int k) =>
 			Assert.Equal(expected, BinomialCoefficient(n, k));
 
-		[Theory]
-		[InlineData]
+		[Fact]
 		public void Permutations_OfString() =>
 			Assert.Equal(
 				new[] { "ABC", "ACB", "BAC", "BCA", "CBA", "CAB" },
@@ -47,9 +46,14 @@ namespace Code.Nuggitz {
 
 	public class Permutations {
 
-		public static IEnumerable<string> GetAllPermutations(string input) => GetAllPermutations(input.ToCharArray(), 0).Select(a => new string(a.ToArray()));
-		public static IEnumerable<T[]> GetAllPermutations<T>(params T[] items) => GetAllPermutations(items, 0);
-		public static IEnumerable<T[]> GetAllPermutations<T>(IEnumerable<T> input) => GetAllPermutations(input, 0);
+		public static IEnumerable<string> GetAllPermutations(string input) =>
+			GetAllPermutations(input.ToCharArray(), 0).Select(a => new string(a.ToArray()));
+
+		public static IEnumerable<T[]> GetAllPermutations<T>(params T[] items) =>
+			GetAllPermutations(items, 0);
+
+		public static IEnumerable<T[]> GetAllPermutations<T>(IEnumerable<T> input) =>
+			GetAllPermutations(input, 0);
 
 		protected static IEnumerable<T[]> GetAllPermutations<T>(IEnumerable<T> input, int start = 0) {
 
@@ -73,23 +77,25 @@ namespace Code.Nuggitz {
 			}
 		}
 
-		public static IEnumerable<T[]> GetAllSubsets<T>(IEnumerable<T> items, int choose) {
+		public static IEnumerable<T[]> GetAllSubsets<T>(IEnumerable<T> items, int choose) =>
+			GetAllSubsets(items.ToList(), choose, 0);
 
-			var count = 0;
-
-			foreach (var item in items) {
-				if (choose == 1) {
-					yield return new[] { item };
-				}
-				else {
-					foreach (var subset in GetAllSubsets(items.Skip(++count), choose - 1)) {
-						yield return new[] { item }.Concat(subset).ToArray();
+		public static IEnumerable<T[]> GetAllSubsets<T>(List<T> items, int choose, int startIndex) {
+			if (choose == 0) {
+				yield return Array.Empty<T>();
+			}
+			else {
+				for (int i = startIndex; i <= items.Count - choose; i++) {
+					foreach (var subset in GetAllSubsets(items, choose - 1, i + 1)) {
+						yield return subset.Prepend(items[i]).ToArray();
 					}
 				}
 			}
 		}
 
-		public static long BinomialCoefficient(int n, int k) => BinomialCoefficient((uint)n, (uint)k);
+
+		public static long BinomialCoefficient(int n, int k) =>
+			BinomialCoefficient((uint)n, (uint)k);
 
 		public static long BinomialCoefficient(uint n, uint k) {
 
